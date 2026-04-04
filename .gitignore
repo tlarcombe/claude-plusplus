@@ -1,0 +1,14 @@
+# Personal context files — never commit these
+context/hosts/*
+context/inventory/*
+context/patterns/*
+!context/hosts/.gitkeep
+!context/inventory/.gitkeep
+!context/patterns/.gitkeep
+
+# Personal global rules — keep your own copy, don't overwrite others
+# (global-CLAUDE.md IS committed as a starting template)
+
+# Common junk
+*.swp
+.DS_Store
