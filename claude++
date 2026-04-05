@@ -35,7 +35,9 @@ launch_claude() {
     project_context="$(pwd)/.claude/context"
     [ -d "$project_context" ] && add_dirs+=(--add-dir "$project_context")
 
-    claude --permission-mode bypassPermissions "${add_dirs[@]}" "$@"
+    local project_name
+    project_name=$(basename "$(pwd)")
+    claude --permission-mode bypassPermissions --name "$project_name" "${add_dirs[@]}" "$@"
 }
 
 # ── Delete project ────────────────────────────────────────────────────────────
@@ -201,7 +203,6 @@ resume_from_session() {
     [ "$session_file" != "$target_file" ] && cp "$session_file" "$target_file"
     touch "$target_file"
     cd "$project_path"
-    set_title "$(basename "$project_path")"
     launch_claude --continue
     set_title "claude++"
 }
@@ -666,7 +667,6 @@ main() {
 
         # ── No project (quick task) ──────────────────────────────────────────
         if [ "$has_sessions_flag" = "NOPROJ" ]; then
-            set_title "claude++"
             launch_claude
             set_title "claude++"; clear; continue
         fi
@@ -680,7 +680,6 @@ main() {
             mkdir -p "$new_dir"
             cd "$new_dir"
             touch CLAUDE.md
-            set_title "$project_name"
             launch_claude
             set_title "claude++"; clear; continue
         fi
@@ -694,7 +693,6 @@ main() {
             if [ -d "$new_dir" ]; then
                 echo "  Directory already exists: $new_dir" >&2
                 cd "$new_dir"
-                set_title "$project_name"
                 launch_claude --continue
                 set_title "claude++"; clear; continue
             fi
@@ -703,7 +701,6 @@ main() {
             git init -q
             touch CLAUDE.md
             echo "  Created: $new_dir"
-            set_title "$project_name"
             launch_claude
             set_title "claude++"; clear; continue
         fi
@@ -715,7 +712,6 @@ main() {
         fi
 
         cd "$selected_path"
-        set_title "$(basename "$selected_path")"
         if [[ "$has_sessions_flag" =~ ^(1|L)$ ]]; then
             launch_claude --continue
         else
