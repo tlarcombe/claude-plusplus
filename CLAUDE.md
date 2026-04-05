@@ -18,10 +18,40 @@ It wraps the `claude` CLI with an fzf-based project picker and shared context ma
 
 ## Architecture
 
-- **Launcher** (`launch_claude`): wraps `claude --permission-mode bypassPermissions` with `--add-dir ~/.claude` so Claude can read/write `~/.claude/CLAUDE.md` and `~/.claude/context/` from any project
+- **Launcher** (`launch_claude`): wraps `claude --permission-mode bypassPermissions` with `--add-dir ~/.claude` so Claude can read/write `~/.claude/CLAUDE.md` and `~/.claude/context/` from any project. Passes `--name <project>` so the terminal title reflects the active project.
 - **Project list** (`build_project_list`): Python inline script scanning `~/.claude/projects/` session data + `~/projects/` directories
 - **Preview scripts**: called by fzf `--preview`, separate executables so fzf can invoke them directly
 - **Shared context**: `global-CLAUDE.md` and `context/` live in this repo and are symlinked into `~/.claude/` by `install.sh` — on a NAS-mounted `~/projects/` this makes them available across all machines automatically
+
+## Enriched environment (`~/.claude/`)
+
+The following components live in `~/.claude/` and are available in every session launched via claude++:
+
+| Component | Count | Location |
+|-----------|-------|----------|
+| Language rules | 16 dirs | `~/.claude/rules/` |
+| Agents | 38 | `~/.claude/agents/` |
+| Slash commands | 74 | `~/.claude/commands/` |
+| Skills | 85 | `~/.claude/skills/` |
+| Hook scripts | 35 JS/shell | `~/.claude/scripts/hooks/` |
+
+### Active hooks (`~/.claude/settings.json`)
+
+| Event | Hooks |
+|-------|-------|
+| PreToolUse | block-no-verify, commit-quality, git-push-reminder, doc-file-warning, suggest-compact, config-protection, continuous-learning |
+| PostToolUse | command-log-audit, pr-created, quality-gate, console-warn, edit-accumulator |
+| Stop | session-end, cost-tracker, evaluate-session, format-typecheck, check-console-log |
+| SessionStart | bootstrap (loads previous context, detects package manager) |
+| PreCompact | save state before compaction |
+
+Opt-in hooks (dormant until env vars set):
+- `ECC_GOVERNANCE_CAPTURE=1` — audit capture
+- `ECC_ENABLE_INSAITS=1` — AI security scanning
+
+### Shell environment
+
+`CLAUDE_PLUGIN_ROOT=$HOME/.claude` is set in `~/.zshrc` so hook scripts resolve correctly.
 
 ## Session directory encoding
 

@@ -7,10 +7,10 @@ Successor to [claude+](https://github.com/tlarcombe/claude-project_chooser).
 ## What it does
 
 - Scans `~/.claude/projects/` and `~/projects/` to build a project list sorted by recent activity
-- Launches Claude Code with modern flags (`--permission-mode bypassPermissions`)
-- Passes `~/.claude/context/` to every session so Claude can look up shared reference data (servers, inventory, patterns)
-- Passes `~/.claude/` so Claude can update your global `CLAUDE.md` when you state new rules
+- Launches Claude Code with modern flags (`--permission-mode bypassPermissions`, `--name <project>`)
+- Passes `~/.claude/` to every session so Claude can look up shared reference data and update global rules
 - Shows live session indicators, session history, and cross-project search
+- Sets the terminal window title to the active project name
 - Optional tmux wrapping via `--tmux` flag — not forced
 
 ## Requirements
@@ -81,6 +81,20 @@ claude++ --tmux   # same, wrapped in a named tmux session (attach/detach)
 
 Claude will update it automatically when you state a new global rule mid-session. Project-specific rules go in the project's own `CLAUDE.md`.
 
+## Enriched environment
+
+claude++ is designed to work with an enriched `~/.claude/` directory. The following components are supported and loaded automatically when present:
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| Language rules | `~/.claude/rules/` | Coding standards per language/framework |
+| Agents | `~/.claude/agents/` | Specialist subagents (reviewer, planner, etc.) |
+| Slash commands | `~/.claude/commands/` | Custom `/commands` available in every session |
+| Skills | `~/.claude/skills/` | Deep reference material for specific tasks |
+| Hook scripts | `~/.claude/scripts/hooks/` | Automated behaviours (quality gates, session tracking, etc.) |
+
+Hooks are wired via `~/.claude/settings.json`. When present, the bootstrap hook loads previous session context and detects the project's package manager on session start.
+
 ## What's different from claude+
 
 | claude+ | claude++ |
@@ -90,4 +104,5 @@ Claude will update it automatically when you state a new global rule mid-session
 | Rate-limit auto-retry (fragile) | Dropped — just return to picker |
 | Merge / archive / fork | Dropped |
 | No shared context | `--add-dir ~/.claude` on every launch |
+| No window title management | Terminal title set to project name via `--name` |
 | 1501 lines | ~480 lines |
