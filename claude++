@@ -21,6 +21,12 @@ find_session_dirs() {
     [ -d "$CLAUDE_BASE_DIR/projects/$enc" ] && echo "$CLAUDE_BASE_DIR/projects/$enc"
 }
 
+# ── Window title ─────────────────────────────────────────────────────────────
+
+set_title() {
+    printf '\033]2;%s\007' "$1"
+}
+
 # ── Launch ────────────────────────────────────────────────────────────────────
 
 launch_claude() {
@@ -195,7 +201,9 @@ resume_from_session() {
     [ "$session_file" != "$target_file" ] && cp "$session_file" "$target_file"
     touch "$target_file"
     cd "$project_path"
+    set_title "$(basename "$project_path")"
     launch_claude --continue
+    set_title "claude++"
 }
 
 browse_sessions() {
@@ -562,6 +570,7 @@ main() {
 
     mkdir -p "$CLAUDE_CONTEXT_DIR"
 
+    set_title "claude++"
     clear
     while true; do
         local project_list
@@ -657,8 +666,9 @@ main() {
 
         # ── No project (quick task) ──────────────────────────────────────────
         if [ "$has_sessions_flag" = "NOPROJ" ]; then
+            set_title "claude++"
             launch_claude
-            clear; continue
+            set_title "claude++"; clear; continue
         fi
 
         # ── New project (no git) ─────────────────────────────────────────────
@@ -670,8 +680,9 @@ main() {
             mkdir -p "$new_dir"
             cd "$new_dir"
             touch CLAUDE.md
+            set_title "$project_name"
             launch_claude
-            clear; continue
+            set_title "claude++"; clear; continue
         fi
 
         # ── New project (with git) ───────────────────────────────────────────
@@ -683,16 +694,18 @@ main() {
             if [ -d "$new_dir" ]; then
                 echo "  Directory already exists: $new_dir" >&2
                 cd "$new_dir"
+                set_title "$project_name"
                 launch_claude --continue
-                clear; continue
+                set_title "claude++"; clear; continue
             fi
             mkdir -p "$new_dir"
             cd "$new_dir"
             git init -q
             touch CLAUDE.md
             echo "  Created: $new_dir"
+            set_title "$project_name"
             launch_claude
-            clear; continue
+            set_title "claude++"; clear; continue
         fi
 
         # ── Existing project ─────────────────────────────────────────────────
@@ -702,12 +715,13 @@ main() {
         fi
 
         cd "$selected_path"
+        set_title "$(basename "$selected_path")"
         if [[ "$has_sessions_flag" =~ ^(1|L)$ ]]; then
             launch_claude --continue
         else
             launch_claude
         fi
-        clear
+        set_title "claude++"; clear
     done
 }
 
