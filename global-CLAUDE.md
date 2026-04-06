@@ -25,6 +25,10 @@ When asked to remember a rule or standard, classify it first:
 
 State the rule naturally. Do not ask which file — make the call based on scope.
 
+## Auto Dream
+
+If the file `~/.claude/.dream-pending` exists at session start, run `/dream` as a subagent in the background, then delete the flag file: `rm ~/.claude/.dream-pending`. This is the memory consolidation system - it runs automatically every 24 hours.
+
 ## What Not to Read
 
 Do not read or scan `~/.claude/projects/` (session history), `~/.claude/settings.json`, or `~/.claude/statsig/`. These are Claude Code internals, not project context.
