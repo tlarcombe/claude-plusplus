@@ -27,7 +27,7 @@ State the rule naturally. Do not ask which file — make the call based on scope
 
 ## Auto Dream
 
-If the file `~/.claude/.dream-pending` exists at session start, run `/dream` as a subagent in the background, then delete the flag file: `rm ~/.claude/.dream-pending`. This is the memory consolidation system - it runs automatically every 24 hours.
+If the file `~/.claude/.dream-pending` exists at session start, run `/mnemosyne` as a subagent in the background, then delete the flag file: `rm ~/.claude/.dream-pending`. This is the Mnemosyne memory consolidation system — it runs the 5-phase CIA dream cycle automatically every 24 hours.
 
 ## What Not to Read
 
