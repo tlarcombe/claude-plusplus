@@ -14,6 +14,19 @@ These directories are always available via tool access. Read the relevant files 
 
 ## Rules and Standards
 
+### Editing Live Server Files (MANDATORY — no exceptions)
+
+Before editing any file that is served live from a remote server (HTML pages, config files, etc.), you MUST:
+
+1. **Fetch the live copy from the server first** — never use a local working copy as the editing base. The live server copy is always the source of truth.
+2. **Back it up on the server** before overwriting: `sudo cp /path/file /path/file.bak.$(date +%Y%m%d%H%M%S)`
+3. **Edit the freshly-fetched copy**, then deploy it back.
+4. **Sync the local repo copy** — after deploying, commit the updated file so the repo matches what's live.
+
+Why this matters: local copies go stale without warning. Editing a stale local copy and deploying it silently overwrites all live changes made since the last sync. This happened twice in 2026 — content lost both times.
+
+**Applies to:** home.ts.larcombe.tech (chzursrv02:/var/www/html/index.html), any other statically-served pages, nginx/Apache configs, and similar live-served files.
+
 ### Development
 - All development projects, including websites, should be committed to a private GitHub repo and pulled from there for deployment on a remote server. Never deploy by pushing files directly — always: commit → push to GitHub → pull on server.
 
