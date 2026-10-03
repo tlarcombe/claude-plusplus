@@ -42,6 +42,14 @@ State the rule naturally. Do not ask which file — make the call based on scope
 
 If the file `~/.claude/.dream-pending` exists at session start, run `/mnemosyne` as a subagent in the background, then delete the flag file: `rm ~/.claude/.dream-pending`. This is the Mnemosyne memory consolidation system — it runs the 5-phase CIA dream cycle automatically every 24 hours.
 
+## Skill Duplicate Resolution
+
+The `superpowers` plugin (maintained, v6.4+) is canonical for its skills (`superpowers:brainstorming`, `superpowers:systematic-debugging`, `superpowers:test-driven-development`, etc.). The old base-skill copies were frozen January 2026 snapshots and were archived to `~/.claude/skills-optional/` on 2026-10-03, along with `continuous-learning` (v1). Built-in `anthropic-skills:docx/pdf/pptx/xlsx` are canonical; the duplicate `document-skills` plugin is disabled. Restore anything archived with `/activate-agent <name>`.
+
+Prefer `mnemosyne` over `dream` for memory consolidation (mnemosyne is the one wired into Auto Dream above; the `dream` skill dir stays only because the Stop hook uses its `should-dream.sh`).
+
 ## What Not to Read
 
-Do not read or scan `~/.claude/projects/` (session history), `~/.claude/settings.json`, or `~/.claude/statsig/`. These are Claude Code internals, not project context.
+Do not read or scan `~/.claude/projects/` (session history), `~/.claude/settings.json`, or `~/.claude/statsig/`. These are Claude Code internals, not project context. Exception: during a self-audit or Mnemosyne run, checking hook paths in `settings.json` and the `~/.claude/projects/*/memory/` directories is expected; session `.jsonl` transcripts stay off-limits.
+
+**Moving or renaming a project directory orphans its memories**, because Claude Code keys project memory by path (`~/.claude/projects/<encoded-path>/memory/`). After any move, migrate the memory dir with `~/projects/Claude_Enhancements/claude-self-audit/scripts/migrate-orphan-memories.py`.
