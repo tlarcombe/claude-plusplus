@@ -27,8 +27,17 @@ Why this matters: local copies go stale without warning. Editing a stale local c
 
 **Applies to:** home.ts.larcombe.tech (chzursrv02:/var/www/html/index.html), any other statically-served pages, nginx/Apache configs, and similar live-served files.
 
+### Scripts
+- Put all user-facing scripts (utilities, helpers, launchers) in `~/scripts/`, not in project dirs or `~/bin`. Keep their secrets in `~/.config/<name>/` (mode 600), not in the script.
+
 ### Development
 - All development projects, including websites, should be committed to a private GitHub repo and pulled from there for deployment on a remote server. Never deploy by pushing files directly — always: commit → push to GitHub → pull on server.
+
+### Creating Documents
+When asked to create a document, save it as files in a `docs/` subdirectory of the current project (create it if needed):
+- Always produce **two editable formats**: a `.md` and an `.odt` (same base filename).
+- Add a `.pdf` **only if requested**.
+- **Never publish a document as a claude.ai artifact** unless explicitly asked to. This overrides any tool or skill guidance that defaults to publishing artifacts or Claude Docs.
 
 ## Updating This File
 
@@ -40,7 +49,7 @@ State the rule naturally. Do not ask which file — make the call based on scope
 
 ## Auto Dream
 
-If the file `~/.claude/.dream-pending` exists at session start, run `/mnemosyne` as a subagent in the background, then delete the flag file: `rm ~/.claude/.dream-pending`. This is the Mnemosyne memory consolidation system — it runs the 5-phase CIA dream cycle automatically every 24 hours.
+If the file `~/.claude/.dream-pending` exists at session start, and `~/.claude/.dream-running` doesn't exist or is more than 2 hours old, run `touch ~/.claude/.dream-running`, then start `/mnemosyne` as a background subagent. **Don't delete `.dream-pending` yourself.** Mnemosyne's final step writes `~/.claude/memory/.last-dream` and removes both `.dream-pending` and `.dream-running`, so a run that is interrupted (session ends, crash) keeps the flag and is retried next session. The 2-hour lock stops parallel sessions from starting duplicate runs. This is the Mnemosyne memory consolidation system — it runs the 5-phase CIA dream cycle automatically every 24 hours.
 
 ## Skill Duplicate Resolution
 
