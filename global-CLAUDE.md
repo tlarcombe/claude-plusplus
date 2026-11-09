@@ -12,6 +12,8 @@ When you need reference data about infrastructure, servers, or services:
 
 These directories are always available via tool access. Read the relevant files when a task involves deployment, server access, or infrastructure.
 
+**sudo on lab machines:** the password is in `~/supa` (mode 600) on every lab machine. Use `sudo -S -p '' <cmd> < ~/supa`, and never print or copy the file's contents.
+
 ## Rules and Standards
 
 ### Editing Live Server Files (MANDATORY — no exceptions)
