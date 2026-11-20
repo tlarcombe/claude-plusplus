@@ -12,3 +12,7 @@ context/patterns/*
 # Common junk
 *.swp
 .DS_Store
+
+# Backup copies
+*.bak
+*.bak.*

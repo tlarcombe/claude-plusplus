@@ -64,3 +64,9 @@ Prefer `mnemosyne` over `dream` for memory consolidation (mnemosyne is the one w
 Do not read or scan `~/.claude/projects/` (session history), `~/.claude/settings.json`, or `~/.claude/statsig/`. These are Claude Code internals, not project context. Exception: during a self-audit or Mnemosyne run, checking hook paths in `settings.json` and the `~/.claude/projects/*/memory/` directories is expected; session `.jsonl` transcripts stay off-limits.
 
 **Moving or renaming a project directory orphans its memories**, because Claude Code keys project memory by path (`~/.claude/projects/<encoded-path>/memory/`). After any move, migrate the memory dir with `~/projects/Claude_Enhancements/claude-self-audit/scripts/migrate-orphan-memories.py`.
+
+<!-- lean-ctx -->
+<!-- lean-ctx-governor-v1 -->
+lean-ctx keeps native Read/Bash results lossless; an identical repeat may show `[unchanged …]` (the full result is earlier in this conversation).
+Optional `ctx_*` tools (e.g. ctx_compose for ranked files with source) load on demand via tool search.
+<!-- /lean-ctx -->
