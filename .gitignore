@@ -16,3 +16,6 @@ context/patterns/*
 # Backup copies
 *.bak
 *.bak.*
+
+# Local tool state
+.chooser/
